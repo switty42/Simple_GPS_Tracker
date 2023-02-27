@@ -2,14 +2,14 @@
     2-26-23
     Author / Modifier - Stephen Witty switty@level500.com
 
-    Project - create simple GPS tracker using RAK4631 - based on modified version from RAK WisBlock
+    Project - create simple GPS tracker using RAK4631 - based on modified version from RAK WisBlock.
 
     Project should be considered POC / Demo code
 
-    Code based RAK WisBlock GPS tracker example code with modifications
-    Base code was taken from Arduino IDE examples that RAK included - GPS tracker solution
+    Code based on RAK WisBlock GPS tracker example code with some modifications
+    Base code was part of Arduino IDE examples that RAK included - GPS tracking solution
 
-    Using RAK4631 with RAK1910 (GPS module) in slot A of baseboard
+    Using a RAK4631 with RAK1910 (GPS module) in slot A of baseboard
 
     V1 - 2-26-23  Initial dev work
 */
