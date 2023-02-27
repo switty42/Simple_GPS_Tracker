@@ -1,0 +1,11 @@
+// Stephen Witty 2-26-23  switty@level500.com
+// V1 - Initial
+
+function Decoder(payload, port) {
+    
+    var decoded ={};
+    
+    decoded.gps_location= "(" + rawPayload.decoded.payload.lat + "," + rawPayload.decoded.payload.long + ")";  
+    
+    return decoded;
+}

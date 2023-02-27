@@ -1,0 +1,18 @@
+// Author / Modifier - Stephen Witty  switty@level500.com
+// GPS modified decoder from RAK here 
+// https://github.com/RAKWireless/WisBlock/tree/master/examples/RAK4630/solutions/GPS_Tracker
+// Note that bytes and ports are flipped for some decoders/products
+// DataCake also has a similar decoder example here
+// https://docs.datacake.de/lorawan/payload-decoders/location-and-gps
+
+// Version 1 2-26-23 - Initial dev
+
+function Decoder(bytes,port) 
+{  
+ decoded={};
+ decoded.version=1;
+ decoded.lat = ((bytes[1] << 24) | (bytes[2] << 16) | (bytes[3] << 8) | (bytes[4]))/100000;
+ decoded.long = ((bytes[6] << 24) | (bytes[7] << 16) | (bytes[8] << 8) | (bytes[9]))/100000;
+
+ return decoded;
+}
