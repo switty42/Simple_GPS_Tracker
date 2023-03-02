@@ -11,7 +11,14 @@
 
     Using a RAK4631 with RAK1910 (GPS module) in slot A of baseboard
 
+    Built in green LED is used as a diagnostic
+    - slow flash - trying to join LoRa network (this starts right after MCU boot)
+    - rapid flash - LoRa network join failed (must reboot MCU to recover)
+    - solid green - LoRa network joined
+    - one second green off and then back on - LoRa message sent (this means GPS lock was made)
+
     V1 - 2-26-23  Initial dev work
+    V2 - 2-28-23  Add diagnostic LED
 */
 
 //Original RAK comment header below - 3-axis acceleration code was removed among other things removed/changed/added 
@@ -47,7 +54,7 @@
 #include <TinyGPS.h>        //http://librarymanager/All#TinyGPS
 #include "keys.h"
 
-#define VERSION "1"
+#define VERSION "2"
 
 TinyGPS gps;
 
@@ -102,6 +109,12 @@ TimerEvent_t appTimer;
 static uint32_t timers_init(void);
 static uint32_t count = 0;
 static uint32_t count_fail = 0;
+
+//Added globals for tracking lora join status, used to blink diagnostic light
+bool join_running=false;
+bool join_success=false;
+bool join_failed=false;
+bool lora_sent=false;
 
 void setup()
 {
@@ -165,18 +178,46 @@ void setup()
   }
 
   // Start Join procedure
+  join_running=true;
   lmh_join();
 }
 
 void loop()
 {
-  
+  while(join_running) //Blink light slow while trying to join LoRa network
+  {  
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(700);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(700);
+  }
+
+  while(join_running==false && join_failed==true) //Raip blink for error condition, this will run forever if entered
+  {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(75);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(75);
+  }
+
+  //Soild green if all good
+  if (join_running==false && join_success==true) digitalWrite(LED_BUILTIN, HIGH);
+
+  if (lora_sent) //Message sent - this emans LoRa is joined and GPS is locked
+  {
+    digitalWrite(LED_BUILTIN,LOW);
+    delay(1000);
+    digitalWrite(LED_BUILTIN,HIGH);
+    lora_sent=false;
+  }
 }
 
 /**@brief LoRa function for handling HasJoined event.
  */
 void lorawan_has_joined_handler(void)
 {
+  join_success=true;
+  join_running=false;
   Serial.println("Network Joined!");
 
   lmh_error_status ret = lmh_class_request(gCurrentClass);
@@ -191,6 +232,8 @@ void lorawan_has_joined_handler(void)
 */
 static void lorawan_join_failed_handler(void)
 {
+  join_failed=true;
+  join_running=false;
   Serial.println("OTAA join failed!");
 }
 
@@ -226,6 +269,7 @@ void send_lora_frame(void)
   {
     count++;
     Serial.printf("lmh_send ok count %d\n", count);
+    lora_sent=true;
   }
   else
   {
