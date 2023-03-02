@@ -35,7 +35,11 @@ When powered on, the MCU will try and connect to the Helium LoRa network.  If un
 
 ### LED meaning:
 - Orange LED means the MCU is powered
-
+Built in green LED is used as a diagnostic
+- slow flash - trying to join LoRa network (this starts right after MCU boot)
+- rapid flash - LoRa network join failed (must reboot MCU to recover)
+- solid green - LoRa network joined
+- one second green off and then back on - LoRa message sent (this means GPS lock was made)
 
 ### Misc:
 - Your Helium keys must be entered into keys.h
