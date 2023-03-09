@@ -6,13 +6,16 @@
 // https://docs.datacake.de/lorawan/payload-decoders/location-and-gps
 
 // Version 1 2-26-23 - Initial dev
+// Version 2 3-8-234 - Added timestamp field
 
 function Decoder(bytes,port) 
 {  
  decoded={};
- decoded.version=1;
+ decoded.version=2;
  decoded.lat = ((bytes[1] << 24) | (bytes[2] << 16) | (bytes[3] << 8) | (bytes[4]))/100000;
  decoded.long = ((bytes[6] << 24) | (bytes[7] << 16) | (bytes[8] << 8) | (bytes[9]))/100000;
+ 
+ decoded.timestamp = Math.floor(Date.now()/1000);
 
  return decoded;
 }
