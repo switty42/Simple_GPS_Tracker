@@ -4,7 +4,7 @@ Docs 2-26-23 V1 (For questions or comments:  Stephen Witty switty@level500.com)
 ### Project Overview:
 This project is a simple GPS tracker application that sends up GPS coordinates every 20 seconds using the RAK4631 and GPS module.  It communicates data via the Helium LoRa network.  Data decoders are included for the Helium console and DataCakes.  The code is based on the RAK GPS tracking example included with the Arduino IDE after RAK is installed.  The changes are very minor including removing accelerometer activation for data transmission. 
 
-This project should be consider demo/POC quality.
+This project should be considered demo/POC quality.
 
 ### Many thanks:
 - The Mycelium Networks Builder Program for support and encouragement
